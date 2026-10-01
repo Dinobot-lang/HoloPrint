@@ -26,8 +26,4 @@ bambu-quest-ar/
 └── unity-quest-app/      # app Unity per Quest 3
 ```
 
-## Regole di lavoro suggerite
 
-- Mai committare **access code**, numeri di serie o IP reali: usare un file `.env` o `config.local.json` e inserirlo nel `.gitignore`.
-- Ogni decisione tecnica importante va annotata in `docs/` (una riga di motivazione basta).
-- Branch `main` stabile, lavoro su branch `feat/...`.
