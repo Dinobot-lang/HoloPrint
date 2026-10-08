@@ -137,7 +137,7 @@ Ordine consigliato, dal più innocuo al più delicato:
 12. Test su perdita di rete
 
 ## 5. TEST
-** Codice per il test aggiornato** (se il primo non funziona usate questo):
+**Codice per il test aggiornato** (se il primo non funziona usate questo):
 ```python
 import json, ssl
 import paho.mqtt.client as mqtt
