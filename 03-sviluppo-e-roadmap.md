@@ -136,7 +136,8 @@ Ordine consigliato, dal più innocuo al più delicato:
 11. Gateway opzionale
 12. Test su perdita di rete
 
-## Codice per il test aggiornato** (se il primo non funziona usate questo):
+##TEST
+** Codice per il test aggiornato(se il primo non funziona usate questo):
 ```python
 import json, ssl
 import paho.mqtt.client as mqtt
