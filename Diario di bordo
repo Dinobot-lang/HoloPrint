@@ -1,6 +1,13 @@
 Giorno 1.
-Ho segnato su un tacquino la versione della mia bambulab X2D e il suo serial number, dopodichè ho controllato la versione del software per poter capire su quale interfaccia predisporre il visore. 
+Ho segnato su un tacquino la versione della mia bambulab X2D e il suo serial number, dopodichè ho controllato la versione del 
+software per poter capire su quale interfaccia predisporre il visore. 
 Attivata la LAN-ONLY option aspetto che la mia stampante finisca il suo progetto per poterla riavviare.
 Giorno 2.
-Buone notizie, lo script preparato nel file 03, HA FUNZIONATO leggo tutti i valori della stampante, unica pecca? ho dovuto riavviare 2/3 volte la stampante a causa dell'access code che cambiava in continuazione, ATTENZIONE ALLE MAIUSCOLE, perchè la maggior parte degli errori me li dava appunto per aver sbagliato un singolo carattere. Inoltre ho aggiornato un paio di volte il codice perchè non mi leggeva nè il SN nè l'ip (ve lo lascio in fondo al file), inoltre aggiornerò tutti i file per oggi e tutto.
+Buone notizie, lo script preparato nel file 03, HA FUNZIONATO leggo tutti i valori della stampante, 
+unica pecca? ho dovuto riavviare 2/3 volte la stampante a causa dell'access code che cambiava in continuazione, 
+ATTENZIONE ALLE MAIUSCOLE, perchè la maggior parte degli errori me li dava appunto per aver sbagliato un singolo carattere. 
+Inoltre ho aggiornato un paio di volte il codice perchè non mi leggeva nè il SN nè l'ip (ve lo lascio in fondo al file), 
+mandato il codice di test avvio una stampa registrando tutti i dati in tempo reale su un file formato .json per poter capire se effettivamente
+il computer legge le informazioni durante la stampa, il prossimo passo sarà passare queste informazioni in tempo reale al visore
+finito tutto aggiornerò tutti i file per oggi e tutto.
 
