@@ -136,4 +136,48 @@ Ordine consigliato, dal più innocuo al più delicato:
 11. Gateway opzionale
 12. Test su perdita di rete
 
-Suggerimento: crea queste voci come **Issues** e una **GitHub Project board** (Todo / In corso / Fatto) nel repository privato.
+**Codice per il test aggiornato** (se il primo non funziona usate questo:
+```python
+import json, ssl
+import paho.mqtt.client as mqtt
+
+HOST   = "192.168.1.77"
+SERIAL = "20P5BJ661500193"
+CODE   = "8582B62F"
+
+state = {}
+
+def merge(dst, src):
+    for k, v in src.items():
+        if isinstance(v, dict) and isinstance(dst.get(k), dict):
+            merge(dst[k], v)
+        else:
+            dst[k] = v
+
+KEYS = ["gcode_state", "subtask_name", "mc_percent", "mc_remaining_time",
+        "layer_num", "total_layer_num", "nozzle_temper", "nozzle_target_temper",
+        "bed_temper", "bed_target_temper", "chamber_temper", "spd_lvl"]
+
+def on_connect(client, userdata, flags, reason_code, properties):
+    print("Connessione:", reason_code)
+    client.subscribe(f"device/{SERIAL}/report")
+    client.publish(f"device/{SERIAL}/request",
+        json.dumps({"pushing": {"sequence_id": "0", "command": "pushall"}}))
+
+def on_message(client, userdata, msg):
+    data = json.loads(msg.payload)
+    if "print" in data:
+        merge(state, data["print"])
+        with open("status_dump.json", "w", encoding="utf-8") as f:
+            json.dump(state, f, indent=2, ensure_ascii=False)
+        riepilogo = {k: state[k] for k in KEYS if k in state}
+        print(riepilogo)
+
+c = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, protocol=mqtt.MQTTv311)
+c.username_pw_set("bblp", CODE)
+c.tls_set(cert_reqs=ssl.CERT_NONE)
+c.tls_insecure_set(True)
+c.on_connect, c.on_message = on_connect, on_message
+c.connect(HOST, 8883, keepalive=60)
+c.loop_forever()
+```
