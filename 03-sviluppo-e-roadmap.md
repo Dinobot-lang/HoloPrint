@@ -137,7 +137,7 @@ Ordine consigliato, dal più innocuo al più delicato:
 12. Test su perdita di rete
 
 ## 5. TEST
-** Codice per il test aggiornato(se il primo non funziona usate questo):
+** Codice per il test aggiornato** (se il primo non funziona usate questo):
 ```python
 import json, ssl
 import paho.mqtt.client as mqtt
@@ -182,3 +182,16 @@ c.on_connect, c.on_message = on_connect, on_message
 c.connect(HOST, 8883, keepalive=60)
 c.loop_forever()
 ```
+**Codice per una prova rapida** (spegne ed accende in loop la luce della stampante)
+questo codice serve per capire realmente se il codice comunica direttamente la stampante
+
+time.sleep(6)
+luce("chamber_light", False)
+time.sleep(6)
+luce("chamber_light", True)
+time.sleep(6)
+luce("work_light", False)
+time.sleep(6)
+luce("work_light", True)
+time.sleep(6)
+c.loop_stop()
