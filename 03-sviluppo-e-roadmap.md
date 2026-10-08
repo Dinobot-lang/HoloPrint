@@ -185,6 +185,7 @@ c.loop_forever()
 **Codice per una prova rapida** (spegne ed accende in loop la luce della stampante)
 questo codice serve per capire realmente se il codice comunica direttamente la stampante
 
+```python
 time.sleep(6)
 luce("chamber_light", False)
 time.sleep(6)
@@ -195,3 +196,4 @@ time.sleep(6)
 luce("work_light", True)
 time.sleep(6)
 c.loop_stop()
+```
