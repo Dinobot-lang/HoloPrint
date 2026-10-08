@@ -142,9 +142,9 @@ Ordine consigliato, dal più innocuo al più delicato:
 import json, ssl
 import paho.mqtt.client as mqtt
 
-HOST   = "192.168.1.77"
-SERIAL = "20P5BJ661500193"
-CODE   = "8582B62F"
+HOST   = ""
+SERIAL = ""
+CODE   = ""
 
 state = {}
 
