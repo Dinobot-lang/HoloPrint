@@ -94,9 +94,37 @@ All'inizio del log `mc_percent` era già 27 con `layer_num` = 1 su 192. La perce
 ### 6.4 Velocità
 `spd_lvl` è rimasto 2 per tutta la stampa e `spd_mag` 100. A fine lavoro `spd_lvl` è tornato a 0. Mappa livello → profilo **non ancora verificata** (nessun cambio manuale di velocità nel log).
 
-### 6.5 Buco di 15 minuti nei dati
-Tra le 22:56:54 e le 23:11:35 il log non contiene righe, poi il messaggio successivo mostra ancora layer 31 e subito dopo layer 192. Possibili cause: il PC si è sospeso o ha perso il Wi-Fi (segnale della stampante -68 dBm), oppure messaggi non arrivati. Il log registra solo i cambiamenti, quindi un periodo senza righe non si distingue da una caduta di connessione.
-**Conseguenza di progetto:** l'app deve conservare l'istante dell'ultimo messaggio, mostrare "dati non aggiornati" se passano più di ~10 s e disabilitare i controlli finché la connessione non torna.
+### 6.5 Buchi nei dati: tre tipi diversi
+Il log registra **solo i cambiamenti**, quindi un'assenza di righe può voler dire cose diverse.
 
-### 6.6 Stati ancora da rilevare
-Il log si chiude con `gcode_state` ancora `RUNNING` (layer 192/192, 99%, tempo residuo 0). Non abbiamo visto **fine stampa**, **pausa** e **errore**: vanno catturati nel prossimo test.
+| Tipo | Esempio | Spiegazione |
+|------|---------|-------------|
+| Buchi brevi (1–35 s) | 22:52:49 → 22:53:24 | Normale: la stampante invia solo ciò che cambia. In quel tratto (calibrazione) nessun campo tracciato variava. |
+| Buco di ~15 min | 22:56:54 → 23:11:35 | **Dati non ricevuti dal PC.** La prima riga dopo il buco è ancora "layer 31" e 3 secondi dopo il layer è 192: 161 layer in 3 s sono impossibili, quindi il tratto intermedio è andato perso. |
+| Buco di ~4 ore | 23:17:07 → 03:13:44 | Come sopra: riga con ugello a 101 °C e un secondo dopo 30 °C. La stampante si è raffreddata mentre il PC non riceveva, e le temperature cambiano di continuo, quindi la stampante stava inviando dati. |
+| Buco di ~4 ore e 20 | 03:13:45 → 07:32:37 | **Ambiguo:** a stampante fredda e ferma i cambiamenti sono rari (1 °C ogni tanto). Può essere silenzio reale o PC sospeso. |
+
+Causa più probabile dei due buchi certi: **sospensione del PC (sleep) o perdita del Wi-Fi**. I messaggi inviati dalla stampante mentre nessuno ascolta non vengono conservati. Da verificare con la cronologia di sospensione di Windows (Visualizzatore eventi → Sistema → Power-Troubleshooter).
+
+**Conseguenze di progetto (valide anche per il visore, che si sospende quando viene tolto):**
+1. Dopo ogni (ri)connessione o ripresa: inviare **`pushall`** e considerare i primi messaggi **non attendibili** finché non arriva la risposta.
+2. Registrare l'istante dell'ultimo messaggio ricevuto e mostrare **"dati non aggiornati"** oltre una soglia.
+3. Il silenzio non basta come segnale di connessione persa (a macchina ferma la stampante tace): serve un **heartbeat**, cioè un `pushall` periodico (es. ogni 30 s, frequenza da testare) e il controllo che arrivi sempre una risposta.
+4. Gestire e registrare gli eventi di disconnessione del client MQTT.
+
+### 6.6 Ciclo di vita di una stampa (osservato)
+| Ora | Stato | Evento |
+|-----|-------|--------|
+| 22:47:14 | `IDLE` → `PREPARE` | avvio dal display/Studio, nome lavoro compare |
+| 22:47:16 | `RUNNING` | `total_layer_num` = 192, `layer_num` = 0 |
+| 22:47:18 | | tempo residuo 22 min, piano obiettivo 55 °C |
+| 22:48:45–22:50 | | l'estrusore 1 viene portato a vari obiettivi (140–250 °C): pre-riscaldamenti/pulizia |
+| 22:52:17 → 22:53:24 | | avanzamento 6% → 27% (fase preparatoria: calibrazioni) |
+| 22:53:34 | | l'ugello "attivo" passa dall'estrusore 0 al 1: `nozzle_temper` prima seguiva l'estrusore 0, poi l'1 |
+| 22:53:51 | | `layer_num` = 1 |
+| 23:11:38 | | layer 192/192, 99%, residuo 0, `spd_lvl` = 0 |
+| 23:14:42 | `FINISH` | 100%, obiettivi a 0, `spd_lvl` torna 2 |
+
+Stati osservati: **IDLE, PREPARE, RUNNING, FINISH**. Ancora da rilevare: pausa e errore.
+
+Nota: `nozzle_temper` / `nozzle_target_temper` seguono l'**estrusore attivo**, che può cambiare durante il lavoro: per mostrare sempre entrambi gli ugelli usare `device.extruder.info[i].temp` decodificato (§6.1).
