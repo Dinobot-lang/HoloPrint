@@ -10,4 +10,6 @@ Inoltre ho aggiornato un paio di volte il codice perchè non mi leggeva nè il S
 mandato il codice di test avvio una stampa registrando tutti i dati in tempo reale su un file formato .json per poter capire se effettivamente
 il computer legge le informazioni durante la stampa, il prossimo passo sarà passare queste informazioni in tempo reale al visore
 finito tutto aggiornerò tutti i file per oggi e tutto.
-
+Giorno 3.
+Grande giorno, istallato unity e metaquest app sul mio computer, apro unity e cambio la modalità di lavoro dal menù da windows a androin, istallo il pacchetto
+meta quest AR(scritto anche nei passaggi dello sviluppo), e comincio a sviluppare un ambiente di lavoro per far comunicare il mio visore con la stampante.
