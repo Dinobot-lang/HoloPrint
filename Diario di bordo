@@ -14,3 +14,6 @@ Giorno 3.
 Grande giorno, istallato unity e metaquest app sul mio computer, apro unity e cambio la modalità di lavoro dal menù da windows a androin, istallo il pacchetto
 meta quest AR(scritto anche nei passaggi dello sviluppo), e comincio a sviluppare un ambiente di lavoro per far comunicare il mio visore con la stampante.
 Giorno 4. FUNZIONA!!!
+ho fatto comunicare dalla stampante dei dati che vengono salvati tramite un codice python tenedo aperto un gateway sul computer
+in questo modo il computer prende i dati dalla stamte e tramite un foglio json li manda sul visore con un interfaccia che ho fatto su
+unity il prossimo passo sarà collegare i dati tramite un qrcode
